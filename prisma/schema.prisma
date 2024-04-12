@@ -36,4 +36,6 @@ model UserFarm {
   user       User @relation(fields: [userId], references: [id])
   userId     Int
   permission Int
+
+  @@unique([farmId, userId])
 }
