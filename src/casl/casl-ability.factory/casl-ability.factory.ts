@@ -79,9 +79,7 @@ export class CaslAbilityFactory {
           farmUsers: {
             some: {
               userId: user.id,
-              permission: {
-                in: [UserFarmPermission.ALL],
-              },
+              permission: UserFarmPermission.ALL,
             },
           },
         },

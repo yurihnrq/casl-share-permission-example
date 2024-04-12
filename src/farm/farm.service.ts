@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateFarmDto } from './dto/create-farm.dto';
 import { UpdateFarmDto } from './dto/update-farm.dto';
 import { PrismaService } from 'src/shared/services/prisma.service';
@@ -7,6 +7,7 @@ import {
   UserAction,
 } from 'src/casl/casl-ability.factory/casl-ability.factory';
 import { accessibleBy } from '@casl/prisma';
+import { ShareFarmDto } from './dto/share-farm.dto';
 
 @Injectable()
 export class FarmService {
@@ -51,6 +52,33 @@ export class FarmService {
       where: {
         ...accessibleBy(ability, UserAction.ALL).Farm,
         id,
+      },
+    });
+  }
+
+  async shareWithUser(
+    id: number,
+    shareFarmDto: ShareFarmDto,
+    ability: AppAbility,
+  ) {
+    try {
+      await this.prisma.farm.findUniqueOrThrow({
+        where: {
+          ...accessibleBy(ability, UserAction.ALL).Farm,
+          id,
+        },
+      });
+    } catch (error) {
+      throw new UnauthorizedException(
+        "You don't have permission to share this farm",
+      );
+    }
+
+    return this.prisma.userFarm.create({
+      data: {
+        farmId: id,
+        userId: shareFarmDto.userId,
+        permission: shareFarmDto.permission,
       },
     });
   }

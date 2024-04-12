@@ -13,6 +13,7 @@ import { CreateFarmDto } from './dto/create-farm.dto';
 import { UpdateFarmDto } from './dto/update-farm.dto';
 import { AppRequest } from 'src/shared/types/app-request.interface';
 import { UseAuth } from 'src/auth/decorators/use-auth.decorators';
+import { ShareFarmDto } from './dto/share-farm.dto';
 
 @Controller('farm')
 export class FarmController {
@@ -50,5 +51,15 @@ export class FarmController {
   @UseAuth()
   remove(@Param('id') id: string, @Req() req: AppRequest) {
     return this.farmService.remove(+id, req.user.ability);
+  }
+
+  @Post(':id/share')
+  @UseAuth()
+  shareWithUser(
+    @Param('id') id: string,
+    @Body() shareFarmDto: ShareFarmDto,
+    @Req() req: AppRequest,
+  ) {
+    return this.farmService.shareWithUser(+id, shareFarmDto, req.user.ability);
   }
 }
