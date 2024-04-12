@@ -26,25 +26,29 @@ export class FarmController {
 
   @Get()
   @UseAuth()
-  findAll() {
-    return this.farmService.findAll();
+  findAll(@Req() req: AppRequest) {
+    return this.farmService.findAll(req.user.ability);
   }
 
   @Get(':id')
   @UseAuth()
-  findOne(@Param('id') id: string) {
-    return this.farmService.findOne(+id);
+  findOne(@Param('id') id: string, @Req() req: AppRequest) {
+    return this.farmService.findOne(+id, req.user.ability);
   }
 
   @Patch(':id')
   @UseAuth()
-  update(@Param('id') id: string, @Body() updateFarmDto: UpdateFarmDto) {
-    return this.farmService.update(+id, updateFarmDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateFarmDto: UpdateFarmDto,
+    @Req() req: AppRequest,
+  ) {
+    return this.farmService.update(+id, updateFarmDto, req.user.ability);
   }
 
   @Delete(':id')
   @UseAuth()
-  remove(@Param('id') id: string) {
-    return this.farmService.remove(+id);
+  remove(@Param('id') id: string, @Req() req: AppRequest) {
+    return this.farmService.remove(+id, req.user.ability);
   }
 }
