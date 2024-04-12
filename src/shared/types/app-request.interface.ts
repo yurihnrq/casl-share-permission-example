@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { AppAbility } from 'src/casl/casl-ability.factory/casl-ability.factory';
 
 export interface AppRequest extends Request {
   user: {
@@ -6,5 +7,6 @@ export interface AppRequest extends Request {
     email: string;
     name: string;
     permission: number;
+    ability: AppAbility;
   };
 }

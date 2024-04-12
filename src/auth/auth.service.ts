@@ -31,7 +31,7 @@ export class AuthService {
       throw new Error('Invalid password');
     }
 
-    const token = jwt.sign(authDto, this.secret);
+    const token = jwt.sign(user, this.secret);
 
     return {
       token,
